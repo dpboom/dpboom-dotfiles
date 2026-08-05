@@ -1,46 +1,44 @@
 #!/bin/bash
 set -e
-# Portable setup for dpboom's dotfiles — run on any fresh Linux install.
-# Installs: Ollama (+ 'uncut' model), opencode configs, hyprland, kitty,
-#           steam, awww, zen-browser, modrinth-app, and your zen profile.
+# Portable setup for dpboom's dotfiles — rebuilds the full machine on a fresh Arch install.
+# Installs: every package from pkglist.txt (official) + pkglist-aur.txt (AUR),
+#           Ollama ('uncut' model), opencode, hyprland, kitty, yazi, zen, walls.
 # Usage: bash setup.sh
+#
+# Prerequisites (fresh install):
+#   - Arch booted with internet
+#   - sudo configured for your user
+#   - [multilib] repo enabled in /etc/pacman.conf (needed for steam)
 
 DOTFILES="$(cd "$(dirname "$0")" && pwd)"
 
 if ! command -v pacman >/dev/null; then
-  echo "Warning: this script targets Arch-based systems. Distro-hop elsewhere at your own risk." >&2
+  echo "This script targets Arch-based systems. Exiting." >&2
+  exit 1
 fi
 
-echo "==> Installing base packages (steam, awww)"
-if command -v pacman >/dev/null; then
-  sudo pacman -S --needed --noconfirm steam awww
+echo "==> Installing all packages from pkglist.txt ($(wc -l < "$DOTFILES/pkglist.txt") official)"
+sudo pacman -S --needed --noconfirm $(cat "$DOTFILES/pkglist.txt")
+
+echo "==> Ensuring AUR helper (yay)"
+if ! command -v yay >/dev/null; then
+  sudo pacman -S --needed --noconfirm base-devel git
+  git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
+  (cd /tmp/yay-bin && makepkg -si --noconfirm)
 fi
 
-echo "==> Installing AUR packages (zen-browser, modrinth-app)"
-if command -v yay >/dev/null; then
-  yay -S --needed --noconfirm zen-browser-bin modrinth-app-bin
-elif command -v paru >/dev/null; then
-  paru -S --needed zen-browser-bin modrinth-app-bin
-else
-  echo "No AUR helper found. Install one (e.g. 'sudo pacman -S --needed yay-git' via pikaur/makepkg) then re-run, or install zen-browser-bin + modrinth-app-bin manually."
-fi
+echo "==> Installing AUR packages ($(wc -l < "$DOTFILES/pkglist-aur.txt"))"
+yay -S --needed --noconfirm $(cat "$DOTFILES/pkglist-aur.txt")
 
-echo "==> Installing Ollama"
-curl -fsSL https://ollama.com/install.sh | sh
-
-echo "==> Copying opencode configs"
-mkdir -p ~/.config/opencode
-cp "$DOTFILES/opencode/opencode.json" ~/.config/opencode/
-cp "$DOTFILES/opencode/tui.json" ~/.config/opencode/
-
-echo "==> Pulling base model + building local model 'uncut'"
-ollama pull richardyoung/qwen3-8b-abliterated:Q4_K_M
-ollama create uncut -f "$DOTFILES/opencode/Modelfile.uncut"
-
-echo "==> Copying hyprland + kitty configs"
-mkdir -p ~/.config/hypr ~/.config/kitty
+echo "==> Copying dotfiles configs (~/.config)"
+mkdir -p ~/.config/hypr ~/.config/kitty ~/.config/opencode
 cp "$DOTFILES/hypr/hyprland.lua" ~/.config/hypr/
 cp "$DOTFILES/kitty/kitty.conf" ~/.config/kitty/
+cp "$DOTFILES/opencode/opencode.json" ~/.config/opencode/
+cp "$DOTFILES/opencode/tui.json" ~/.config/opencode/
+for d in "$DOTFILES"/config/*/; do
+  cp -r "$d" ~/.config/
+done
 
 echo "==> Copying wallpapers"
 mkdir -p ~/walls
@@ -50,13 +48,16 @@ echo "==> Restoring zen profile (mods + extensions)"
 if [ -f "$DOTFILES/zen/zen-profile.tar.gz" ]; then
   mkdir -p ~/.config/zen
   tar -xzf "$DOTFILES/zen/zen-profile.tar.gz" -C ~/.config/zen
-  echo "    zen profile restored into ~/.config/zen"
-else
-  echo "    no zen profile archive found — skipping"
 fi
+
+echo "==> Starting Ollama + building local model 'uncut'"
+sudo systemctl enable --now ollama
+ollama pull richardyoung/qwen3-8b-abliterated:Q4_K_M
+ollama create uncut -f "$DOTFILES/opencode/Modelfile.uncut"
 
 echo "==> Importing saved sessions (run manually, interactive):"
 echo "    opencode import $DOTFILES/opencode/sessions/*.json"
 
-echo "==> Done. Start opencode and pick 'ollama/uncut'."
-echo "    Note: if your GPU isn't detected, update Ollama or re-apply the CUDA lib sync (see README)."
+echo "==> Done. Reboot, then start opencode and pick 'ollama/uncut'."
+echo "    Note: if your GPU isn't detected by Ollama after upgrade, sync CUDA libs:"
+echo "    sudo cp -a /usr/local/lib/ollama/. /usr/lib/ollama/ && sudo systemctl restart ollama"

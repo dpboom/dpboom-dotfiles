@@ -1,0 +1,12 @@
+apg
+byobu
+ccze
+hollywood
+minesweeper-tui
+modrinth-app-bin
+neofetch
+pipes.sh
+speedometer
+tetris-cli
+yay-bin
+zen-browser-bin
