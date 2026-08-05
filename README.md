@@ -4,11 +4,11 @@ Full machine-rebuilder for dpboom's Arch setup. Clone on a fresh install, run on
 
 ## What it does
 
-- Installs **every package** — official (`pkglist.txt`, 60) + AUR (`pkglist-aur.txt`, 12) via yay
-- Steam, awww (wallpaper daemon), zen-browser, modrinth-app, yazi, btop, cava, neofetch, nnn, hyprland, kitty, and more
+- Installs **every package you added** — official (`pkglist.txt`, 45) + AUR (`pkglist-aur.txt`, 12) via yay
+- Steam, awww (wallpaper daemon), zen-browser, modrinth-app, yazi, btop, cava, neofetch, hyprland, kitty, and more
 - **Ollama** + local `uncut` model (Qwen3 8B abliterated, uncensored, multilingual)
 - **opencode** config (default model + agent/model-switch keybinds) + saved sessions
-- All `~/.config` dotfiles (hypr, kitty, btop, cava, neofetch, nnn, yay, tetris-cli)
+- All `~/.config` dotfiles (hypr, kitty, btop, cava, neofetch, yay, tetris-cli)
 - **Wallpapers** → `~/walls`
 - **zen profile** with your mods + extensions → `~/.config/zen`
 
