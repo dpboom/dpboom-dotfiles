@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
 # Portable setup for dpboom's dotfiles — rebuilds the full machine on a fresh Arch install.
+# WARNING: this folder deletes itself when done. Copy anything you want to keep first.
 # Installs: every package from pkglist.txt (official) + pkglist-aur.txt (AUR),
 #           Ollama ('uncut' model), opencode, hyprland, kitty, yazi, zen, walls.
-# Usage: bash setup.sh
+# Usage: ./setup.sh
 #
 # Prerequisites (fresh install):
 #   - Arch booted with internet
@@ -61,3 +62,8 @@ echo "    opencode import $DOTFILES/opencode/sessions/*.json"
 echo "==> Done. Reboot, then start opencode and pick 'ollama/uncut'."
 echo "    Note: if your GPU isn't detected by Ollama after upgrade, sync CUDA libs:"
 echo "    sudo cp -a /usr/local/lib/ollama/. /usr/lib/ollama/ && sudo systemctl restart ollama"
+
+echo "==> Deleting setup folder ($DOTFILES)"
+rm -rf /tmp/yay-bin
+( sleep 3 && rm -rf "$DOTFILES" ) &
+echo "    done — it will be gone in a few seconds."

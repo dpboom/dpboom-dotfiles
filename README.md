@@ -15,8 +15,10 @@ Full machine-rebuilder for dpboom's Arch setup. Clone on a fresh install, run on
 ## Usage
 
 ```bash
-bash setup.sh
+./setup.sh
 ```
+
+**The setup folder deletes itself when done.** Everything lands in place: configs → `~/.config`, wallpapers → `~/walls`, zen profile → `~/.config/zen`. Nothing left behind.
 
 ## Prerequisites
 
