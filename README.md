@@ -10,6 +10,7 @@ Portable dotfiles + installer for dpboom's Linux setup.
 - **steam**, **awww** (Wayland wallpaper daemon)
 - **zen-browser** + **modrinth-app** (AUR)
 - Your **zen profile** (mods + extensions), restored to `~/.config/zen`
+- Your **wallpapers**, restored to `~/walls`
 
 ## Usage
 

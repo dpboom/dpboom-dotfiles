@@ -42,6 +42,10 @@ mkdir -p ~/.config/hypr ~/.config/kitty
 cp "$DOTFILES/hypr/hyprland.lua" ~/.config/hypr/
 cp "$DOTFILES/kitty/kitty.conf" ~/.config/kitty/
 
+echo "==> Copying wallpapers"
+mkdir -p ~/walls
+cp "$DOTFILES"/walls/* ~/walls/ 2>/dev/null || true
+
 echo "==> Restoring zen profile (mods + extensions)"
 if [ -f "$DOTFILES/zen/zen-profile.tar.gz" ]; then
   mkdir -p ~/.config/zen
