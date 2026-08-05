@@ -3,9 +3,6 @@
   "keybinds": {
     "agent_list": "<leader>a",
     "agent_cycle": "tab",
-    "agent_cycle_reverse": "shift+tab",
-    "model_list": "<leader>m",
-    "model_cycle_recent": "f2",
-    "model_cycle_recent_reverse": "shift+f2"
+    "agent_cycle_reverse": "shift+tab"
   }
 }

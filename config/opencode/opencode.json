@@ -11,9 +11,6 @@
       "models": {
         "uncut": {
           "name": "Uncut Qwen3-8B (uncensored)"
-        },
-        "richardyoung/qwen3-8b-abliterated:Q4_K_M": {
-          "name": "Qwen3-8B abliterated (stock)"
         }
       }
     }
