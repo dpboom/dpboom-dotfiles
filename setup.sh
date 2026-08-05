@@ -7,8 +7,7 @@ set -e
 # WARNING: this folder deletes itself when done (the ~/walls copy is kept).
 # Everything lands in ~/walls except configs (-> ~/.config) and models (-> ~/models).
 # Usage: ./setup.sh
-#   Skip the Qwen chat model?  WITH_SWAN=0 ./setup.sh
-#   (kiwi is pinned to Q4_K_S — the only quant of the abliterated build available)
+#   Builds the local uncensored model 'swan' (Qwen3-8B abliterated).
 #
 # Prerequisites:
 #   - Linux with internet, sudo configured for your user
@@ -16,7 +15,6 @@ set -e
 
 DOTFILES="$(cd "$(dirname "$0")" && pwd)"
 WALLS="$HOME/walls"
-MODELS="$HOME/models"
 
 # ---------------- detection ----------------
 detect_pm() {
@@ -141,23 +139,9 @@ else
 fi
 sleep 2
 
-echo "==> Building model 'kiwi' (GLM-Z1-9B-0414 abliterated, Q4_K_S)"
-mkdir -p "$MODELS"
-GGUF="$MODELS/glm-z1-9b-0414-abliterated-q4_k_s-imat.gguf"
-GGUF_URL="https://huggingface.co/irmma/GLM-Z1-9B-0414-abliterated-Q4_K_S-GGUF/resolve/main/glm-z1-9b-0414-abliterated-q4_k_s-imat.gguf"
-if [ ! -s "$GGUF" ]; then
-  echo "    downloading $GGUF_URL (resumable)..."
-  curl -L -C - -o "$GGUF" "$GGUF_URL"
-fi
-# Single source of truth: the repo Modelfile.kiwi (GLM template, stops, caps).
-sed "s|^FROM .*|FROM ./glm-z1-9b-0414-abliterated-q4_k_s-imat.gguf|" "$DOTFILES/Modelfile.kiwi" > "$MODELS/Modelfile.kiwi"
-ollama create kiwi -f "$MODELS/Modelfile.kiwi"
-
-if [ "${WITH_SWAN:-1}" = 1 ]; then
-  echo "==> Building backup model 'swan' (Qwen3-8B abliterated)"
-  ollama pull richardyoung/qwen3-8b-abliterated:Q4_K_M
-  ollama create swan -f "$DOTFILES/Modelfile.swan"
-fi
+echo "==> Building model 'swan' (Qwen3-8B abliterated)"
+ollama pull richardyoung/qwen3-8b-abliterated:Q4_K_M
+ollama create swan -f "$DOTFILES/Modelfile.swan"
 
 # ---------------- opencode ----------------
 echo "==> Ensuring opencode"
@@ -171,8 +155,7 @@ fi
 
 # ---------------- done ----------------
 echo "==> Done. Reboot, then pick your local model in any app:"
-[ "${WITH_SWAN:-0}" = 1 ] && echo "      swan  (Qwen3-8B abliterated)   — fast daily chat (recommended default)"
-echo "      kiwi  (GLM-Z1-9B-0414 abliterated)  — deep thinking; slow, rambles past answers"
+echo "      swan  (Qwen3-8B abliterated)  — your local uncensored AI"
 echo "    Import saved sessions:  opencode import $DOTFILES/sessions/*.json"
 echo "    If Ollama misses your GPU:  sudo cp -a /usr/local/lib/ollama/. /usr/lib/ollama/  &&  sudo systemctl restart ollama"
 
