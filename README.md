@@ -1,16 +1,20 @@
 # dpboom-dotfiles
 
-Full machine-rebuilder for dpboom's Arch setup. Clone on a fresh install, run once, done.
+Full machine-rebuilder for dpboom's Arch setup. Clone, run once, done.
+
+## Layout
+
+- **Repo root = the kit** — `setup.sh`, `pkglist.txt`, `pkglist-aur.txt`, `Modelfile.uncut`, `sessions/`, `zen-profile.tar.gz`, wallpapers. Deployed into `~/walls`.
+- **`config/`** — the files you edit (hypr, kitty, opencode, btop, cava, neofetch, yay, tetris-cli). Deployed to `~/.config`.
 
 ## What it does
 
-- Installs **every package you added** — official (`pkglist.txt`, 45) + AUR (`pkglist-aur.txt`, 12) via yay
+- Installs every package you added — official (`pkglist.txt`, 45) + AUR (`pkglist-aur.txt`, 12) via yay
 - Steam, awww (wallpaper daemon), zen-browser, modrinth-app, yazi, btop, cava, neofetch, hyprland, kitty, and more
 - **Ollama** + local `uncut` model (Qwen3 8B abliterated, uncensored, multilingual)
-- **opencode** config (default model + agent/model-switch keybinds) + saved sessions
-- All `~/.config` dotfiles (hypr, kitty, btop, cava, neofetch, yay, tetris-cli)
-- **Wallpapers** → `~/walls`
-- **zen profile** with your mods + extensions → `~/.config/zen`
+- **opencode** config + saved sessions
+- **Wallpapers** + setup kit → `~/walls`
+- **zen profile** with mods + extensions → `~/.config/zen`
 
 ## Usage
 
@@ -18,7 +22,7 @@ Full machine-rebuilder for dpboom's Arch setup. Clone on a fresh install, run on
 ./setup.sh
 ```
 
-**The setup folder deletes itself when done.** Everything lands in place: configs → `~/.config`, wallpapers → `~/walls`, zen profile → `~/.config/zen`. Nothing left behind.
+`setup.sh` creates `~/walls` if missing (wipes any old content), copies the kit there, deploys configs, installs everything, then **deletes the folder it ran from**. Re-runs are safe: running `~/walls/setup.sh` skips the wipe.
 
 ## Prerequisites
 
