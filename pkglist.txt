@@ -43,3 +43,4 @@ wofi
 xdg-desktop-portal-hyprland
 xdg-utils
 yazi
+zsh

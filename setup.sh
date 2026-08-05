@@ -42,8 +42,18 @@ yay -S --needed --noconfirm $(cat "$DOTFILES/pkglist-aur.txt")
 
 echo "==> Copying configs to ~/.config"
 for d in "$DOTFILES"/config/*/; do
+  case "$(basename "$d")" in zsh) continue ;; esac
   cp -a "$d" ~/.config/
 done
+
+echo "==> Setting up zsh"
+if [ ! -d ~/.oh-my-zsh ]; then
+  RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  git clone -q --depth=1 https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+  git clone -q --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+fi
+cp "$DOTFILES/config/zsh/.zshrc" ~/.zshrc
+sudo chsh -s /usr/bin/zsh "$USER"
 
 echo "==> Restoring zen profile (mods + extensions)"
 if [ -f "$DOTFILES/zen-profile.tar.gz" ]; then
