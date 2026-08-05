@@ -3,6 +3,7 @@
   "keybinds": {
     "agent_list": "<leader>a",
     "agent_cycle": "tab",
-    "agent_cycle_reverse": "shift+tab"
+    "agent_cycle_reverse": "shift+tab",
+    "display_thinking": "f4"
   }
 }
