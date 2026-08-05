@@ -35,6 +35,7 @@ slurp
 smartmontools
 stack
 steam
+ttf-jetbrains-mono-nerd
 ttf-liberation
 uwsm
 wget
