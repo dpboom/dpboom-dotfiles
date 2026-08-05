@@ -7,7 +7,7 @@ set -e
 # WARNING: this folder deletes itself when done (the ~/walls copy is kept).
 # Everything lands in ~/walls except configs (-> ~/.config) and models (-> ~/models).
 # Usage: ./setup.sh
-#   Want the Qwen backup model too?  WITH_SWAN=1 ./setup.sh
+#   Skip the Qwen chat model?  WITH_SWAN=0 ./setup.sh
 #   (kiwi is pinned to Q4_K_S — the only quant of the abliterated build available)
 #
 # Prerequisites:
@@ -153,7 +153,7 @@ fi
 sed "s|^FROM .*|FROM ./glm-z1-9b-0414-abliterated-q4_k_s-imat.gguf|" "$DOTFILES/Modelfile.kiwi" > "$MODELS/Modelfile.kiwi"
 ollama create kiwi -f "$MODELS/Modelfile.kiwi"
 
-if [ "${WITH_SWAN:-0}" = 1 ]; then
+if [ "${WITH_SWAN:-1}" = 1 ]; then
   echo "==> Building backup model 'swan' (Qwen3-8B abliterated)"
   ollama pull richardyoung/qwen3-8b-abliterated:Q4_K_M
   ollama create swan -f "$DOTFILES/Modelfile.swan"
@@ -171,8 +171,8 @@ fi
 
 # ---------------- done ----------------
 echo "==> Done. Reboot, then pick your local model in any app:"
-echo "      kiwi  (GLM-Z1-9B-0414 abliterated)  — primary"
-[ "${WITH_SWAN:-0}" = 1 ] && echo "      swan  (Qwen3-8B abliterated)   — backup"
+[ "${WITH_SWAN:-0}" = 1 ] && echo "      swan  (Qwen3-8B abliterated)   — fast daily chat (recommended default)"
+echo "      kiwi  (GLM-Z1-9B-0414 abliterated)  — deep thinking; slow, rambles past answers"
 echo "    Import saved sessions:  opencode import $DOTFILES/sessions/*.json"
 echo "    If Ollama misses your GPU:  sudo cp -a /usr/local/lib/ollama/. /usr/lib/ollama/  &&  sudo systemctl restart ollama"
 
