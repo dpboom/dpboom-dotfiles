@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "ollama/uncut",
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "uncut": {
+          "name": "Uncut Qwen3-8B (uncensored)"
+        },
+        "richardyoung/qwen3-8b-abliterated:Q4_K_M": {
+          "name": "Qwen3-8B abliterated (stock)"
+        }
+      }
+    }
+  }
+}
