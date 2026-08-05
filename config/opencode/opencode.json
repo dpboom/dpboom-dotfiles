@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "ollama/uncut",
+  "model": "ollama/pickle",
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
@@ -9,8 +9,8 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "uncut": {
-          "name": "Uncut Qwen3-8B (uncensored)"
+        "pickle": {
+          "name": "Pickle (your AI)"
         }
       }
     }
